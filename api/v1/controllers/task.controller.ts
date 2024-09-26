@@ -6,13 +6,24 @@ export const  index = async (req : Request,res: Response)=>{
         deleted: boolean,
         status?: string,
     }
+    // find
     let find: Find = {
         deleted: false,
     }
     if(req.query.status){
         find.status = req.query.status.toString();
     }
-    const tasks = await Task.find(find)
+    // end find
+    // sort
+    let sort = {};
+    if(req.query.sortKey && req.query.sortValue){
+        const sortKey = req.query.sortKey;
+        const sortValue = req.query.sortValue;
+        sort[`${sortKey}`] = sortValue;
+        }
+    // end sort
+
+    const tasks = await Task.find(find).sort(sort)
     res.json(tasks)
 }
 
