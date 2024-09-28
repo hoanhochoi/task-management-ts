@@ -36,7 +36,7 @@ export const  index = async (req : Request,res: Response)=>{
         if (objectSearch.regex) {
             find.title = objectSearch.regex;
         }
-        console.log(find)
+        // console.log(find)
         // keyWord Search
 
     // sort
@@ -84,4 +84,39 @@ export const changeStatus = async (req:Request,res: Response)=>{
         })
     }
     res.json("oke")
+}
+
+export const changeMulti = async (req:Request,res: Response)=>{
+    try {
+        const ids: string[] = req.body.ids;
+        const key:string = req.body.key;
+        const value:string = req.body.value;
+        console.log(ids)
+        console.log(key)
+        console.log(value);
+        switch (key) {
+            case "status":
+                await Task.updateMany(
+                    {_id : {$in: ids}},
+                    {status: value}
+                )
+                res.json({
+                    code: 200,
+                    message: "cập nhật trạng thái thành công!"
+                })
+                break;
+        
+            default:
+                res.json({
+                    code: 400,
+                    message: "không tìm thấy key này"
+                })
+                break;
+        }
+    } catch (error) {
+        res.json({
+            message: "lỗi!",
+            code: 400
+        })
+    }
 }
