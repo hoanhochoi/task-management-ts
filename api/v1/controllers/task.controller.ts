@@ -120,3 +120,21 @@ export const changeMulti = async (req:Request,res: Response)=>{
         })
     }
 }
+
+export const create = async (req:Request,res: Response)=>{
+    try {
+        console.log(req.body);
+        const task = new Task(req.body)
+        const data = await task.save(); 
+        res.json({
+            message: "tạo mới công việc thành công!",
+            data: data,
+            code: 200
+        })
+    } catch (error) {
+        res.json({
+            message: "lỗi",
+            code: 400
+        })
+    }
+}
