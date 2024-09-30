@@ -138,3 +138,40 @@ export const create = async (req:Request,res: Response)=>{
         })
     }
 }
+
+export const edit = async (req:Request, res: Response)=>{
+   try {
+    const id: string = req.params.id;
+    await Task.updateOne({_id: id},req.body);
+    res.json({
+        code: 200,
+        message: "cập nhật công việc thành công!"
+    })
+   } catch (error) {
+    res.json({
+        code: 400,
+        message: "lỗi!"
+    })
+   }
+
+}
+
+
+export const deleteTask = async (req:Request, res: Response)=>{
+  try {
+    const id: string = req.params.id;
+    await Task.updateOne({_id:id},{
+        deleted: true,
+        deletedAt: new Date()
+    })
+    res.json({
+        code: 200,
+        message: "xóa sản phẩm thành công!"
+    })
+  } catch (error) {
+    res.json({
+        code: 400,
+        message: "lỗi"
+    })
+  }
+}
