@@ -1,20 +1,20 @@
-import { Response,Request } from "express";
+import { Response, Request } from "express";
 import User from "../../../models/user.model"
-import {generateRandomString} from "../../../helper/generate"
+import { generateRandomString } from "../../../helper/generate"
 import md5 from "md5"
-export const register =async (req:Request,res: Response) =>{
-    const email:string = req.body.email;
+export const register = async (req: Request, res: Response) => {
+    const email: string = req.body.email;
     const existEmail = await User.findOne({
         email: email,
         deleted: false
     })
-    if(existEmail){
+    if (existEmail) {
         res.json({
             code: 400,
-            message:"email đã tồn tại!"
+            message: "email đã tồn tại!"
         })
         return;
-    }else{
+    } else {
         req.body.token = generateRandomString(20)
         req.body.password = md5(req.body.password)
         const user = new User(req.body);
@@ -28,19 +28,19 @@ export const register =async (req:Request,res: Response) =>{
 
 }
 
-export const login = async (req: Request,res: Response)=>{
+export const login = async (req: Request, res: Response) => {
     const user = await User.findOne({
         email: req.body.email,
-        deleted : false
+        deleted: false
     })
-    if (!user){
+    if (!user) {
         res.json({
             code: 400,
             message: "email không tồn tại!"
         })
         return;
     }
-    if (user.password !== md5(req.body.password)){
+    if (user.password !== md5(req.body.password)) {
         res.json({
             code: 400,
             message: "mật khẩu không đúng!"
@@ -50,6 +50,27 @@ export const login = async (req: Request,res: Response)=>{
     res.json({
         message: "đăng nhập thành công!",
         code: 200,
-        token : user.token
+        token: user.token
     })
+}
+
+export const detail = async (req: Request, res: Response) => {
+    const id: string = req.params.id;
+    try {
+        const user = await User.findOne({
+            _id: id,
+            deleted: false,
+        }).select(" -token -password")
+        console.log(user);
+        res.json({
+            code: 200,
+            user: user,
+            message: "Thông tin user"
+        })
+    } catch (error) {
+        res.json({
+            message: "lỗi!",
+            code: 400
+        })
+    }
 }
