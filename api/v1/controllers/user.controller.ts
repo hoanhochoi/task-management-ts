@@ -55,22 +55,10 @@ export const login = async (req: Request, res: Response) => {
 }
 
 export const detail = async (req: Request, res: Response) => {
-    const id: string = req.params.id;
-    try {
-        const user = await User.findOne({
-            _id: id,
-            deleted: false,
-        }).select(" -token -password")
-        console.log(user);
-        res.json({
-            code: 200,
-            user: user,
-            message: "Thông tin user"
-        })
-    } catch (error) {
-        res.json({
-            message: "lỗi!",
-            code: 400
-        })
-    }
+    res.json({
+        code: 200,
+        user: req["user"],
+        message: "Thông tin user"
+    })
+
 }
