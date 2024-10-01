@@ -8,6 +8,8 @@ database.connect();
 
 const app: Express = express();
 const port: number | string = process.env.PORT || 3000;
+// deploy express typescript api
+// https://dev.to/tirthpatel/deploy-node-ts-express-typescript-on-vercel-284h
 
 // const  corsOptions = {
 //     origin: 'http://example.com',
